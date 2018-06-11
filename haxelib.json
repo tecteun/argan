@@ -1,0 +1,11 @@
+{
+  "name": "argan",
+  "url": "https://github.com/tecteun/argan.hx/",
+  "license": "MIT",
+  "classPath": "src",
+  "tags": ["sys", "args", "arguments", "general", "command", "line", "options", "std"],
+  "description": "Define commandline arguments inline!",
+  "releasenote": "initial release",
+  "version": "1.0.0",
+  "contributors": ["tecteun"]
+}
