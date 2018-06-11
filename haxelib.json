@@ -6,6 +6,6 @@
   "tags": ["sys", "args", "arguments", "general", "command", "line", "options", "std"],
   "description": "Define commandline arguments inline!",
   "releasenote": "initial release",
-  "version": "1.0.0",
+  "version": "0.9.0",
   "contributors": ["tecteun"]
 }
