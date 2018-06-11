@@ -14,19 +14,32 @@ if(Argan.has("help", "show this help")){
     Sys.println('');
     Sys.exit(0);
 }
+
+var debug = Argan.has("debug", "enable debug mode");
+var param1 = Argan.getDefault("some_parameter", "configure some parameter", '//default_url_as_example/');
+var param2 = Argan.getDefault("some_boolean", "configure some boolean", true);
+var param3 = Argan.getDefault("some_int", "configure some int", 1);
 ```
 
 For other non-sys targets:
 
 ```haxe
 if(Argan.has("help", "show this help")){
-    trace("Usage: 'my_executable.exe --option=value or -option value'");
+    trace("Usage: 'pass object with options to Argan.start, for example Argan.start({ debug : true })'");
     for(h in Reflect.fields(Argan.help(true)))
         Sys.println('--${StringTools.rpad(h, " ", 12)}${Reflect.field(Argan.help(true), h)}');
     trace('');
     return;
 }
+var debug = Argan.has("debug", "enable debug mode");
+var param1 = Argan.getDefault("some_parameter", "configure some parameter", '//default_url_as_example/');
+var param2 = Argan.getDefault("some_boolean", "configure some boolean", true);
+var param3 = Argan.getDefault("some_int", "configure some int", 1);
 ```
 
 ## Defines
+
+Serialize options into json:
+
+    -D argan_json_output=filename.json
 
