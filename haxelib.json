@@ -3,9 +3,9 @@
   "url": "https://github.com/tecteun/argan/",
   "license": "MIT",
   "classPath": "src",
-  "tags": ["sys", "args", "arguments", "general", "command", "line", "options", "std"],
-  "description": "Define commandline arguments inline!",
-  "releasenote": "fix url",
+  "tags": ["sys", "args", "arguments", "general", "command", "line", "options", "std", "cli"],
+  "description": "Define command line arguments inline!",
+  "releasenote": "better descriptions",
   "version": "0.9.1",
   "contributors": ["tecteun"]
 }
