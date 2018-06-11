@@ -1,6 +1,6 @@
 ![Argan](https://raw.githubusercontent.com/tecteun/argan/master/drawing.svg?sanitize=true&1)
 ---
-Define command line help inline!
+Define command line help inline! Argan is nuts! 🥜 🎉 
 
 ## Examples
 
