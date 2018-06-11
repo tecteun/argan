@@ -1,3 +1,4 @@
+![Argan](https://raw.githubusercontent.com/tecteun/argan/master/drawing.svg?sanitize=true)
 # argan
 Define command line help inline!
 
