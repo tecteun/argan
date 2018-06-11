@@ -76,9 +76,13 @@ class Argan {
         return obj;
     }
 
-    macro public static function help()
-        return macro { Argan.objectFromMap(haxe.Unserializer.run(haxe.Resource.getString($v{HELP_RESOURCE_KEY}))); };
-    
+    macro public static function help(object:Bool = false){
+        if(object)
+            return macro { Argan.objectFromMap(haxe.Unserializer.run(haxe.Resource.getString($v{HELP_RESOURCE_KEY}))); };
+        else
+            return macro { cast(haxe.Unserializer.run(haxe.Resource.getString($v{HELP_RESOURCE_KEY})), Argan.ArganMap); };
+    }
+
     /**
      *  Checks if commandline argument is given
      *  @param key commandline argument key to check 
@@ -107,6 +111,7 @@ class Argan {
     #if macro
         private static function firstrun(){
             firstRun = false;
+            trace('Saving \'help map\' into haxe.Resource["$HELP_RESOURCE_KEY"], use Argan.get() for easy access');
             if(haxe.macro.Context.defined("argan_json_output")){
                 var val = haxe.macro.Context.definedValue("argan_json_output");
                 if(val != "1"){
@@ -120,13 +125,13 @@ class Argan {
                     str.add('JSON ${jsonFile} saved');
                     str.add(FileSystem.exists(jsonFile) ? ' (overwritten!)\n' : '\n');
                     var content = new StringBuf();
-                    content.add('window["version"] = "${Macros.GetVersion()}";');
-                    content.add('window["${StringTools.htmlEscape(jsonFile)}"] = ${haxe.Json.stringify(objectFromMap(map))}');
+                    //content.add('window["version"] = "${Macros.GetVersion()}";');
+                    //content.add('window["${StringTools.htmlEscape(jsonFile)}"] = ${haxe.Json.stringify(objectFromMap(map))}');
+                    content.add('//${StringTools.htmlEscape(jsonFile)}\n');
+                    content.add('${haxe.Json.stringify(objectFromMap(map))}');
                     File.saveContent(jsonFile, content.toString());
                     trace(str);
                 });
-                
-                trace('Saving \'help map\' into haxe.Resource["$HELP_RESOURCE_KEY"], use Argan.get() for easy access');
             }
         }
         private static function map_load():ArganMap{
