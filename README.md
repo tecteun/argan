@@ -51,7 +51,7 @@ Running
 
 outputs:
 
-![Argan](https://raw.githubusercontent.com/tecteun/argan/master/console.png?sanitize=true&1)
+![Argan](https://raw.githubusercontent.com/tecteun/argan/master/console.png?sanitize=true&1 =440x)
 
 ## Defines
 
