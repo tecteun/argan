@@ -41,13 +41,13 @@ var param3 = Argan.getDefault("some_int", "configure some int", 1);
 
 see [examples/sys/Main.hx](./examples/sys/Main.hx)
 
-### building example [examples/sys](./examples/sys/):
+### building [examples/sys](./examples/sys/):
 
 compile with
 
     haxe examples/sys/build.hxml
 
-Running
+running
 
     ./bin/main --help
 
@@ -57,7 +57,7 @@ outputs:
 
 ## Defines
 
-Serialize options into json:
+Serialize options into json for access by other things
 
     -D argan_json_output=filename.json
 
