@@ -45,10 +45,12 @@ compile with
 
     haxe examples/sys/build.hxml
 
-The command
+Running
 
     ./bin/main --help
+
 outputs:
+
 ![Argan](https://raw.githubusercontent.com/tecteun/argan/master/console.png?sanitize=true&1)
 
 ## Defines
