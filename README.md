@@ -39,7 +39,7 @@ var param3 = Argan.getDefault("some_int", "configure some int", 1);
 
 ## Example program
 
-building examples/sys:
+building [examples/sys](./examples/sys/):
 
 compile with
 
