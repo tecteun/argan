@@ -89,19 +89,9 @@ class Argan {
      *  @param help optional help text, added to haxe.Resource and returned on help() 
      *  @return haxe.macro.Expr
      */
-    macro public static function has(key:String, ?help:String = null):haxe.macro.Expr{
+    macro public static function has(key:String, ?help:String = ""):haxe.macro.Expr{
         #if macro
-            var map:ArganMap = null;
-            if(firstRun)
-                firstrun();
-            
-            if(Context.getResources().exists(HELP_RESOURCE_KEY)){
-                map = map_load();
-                map.exists(key) ? trace('Argan.hx, possible issue with key ${key}, ${key} already in use, use unique keys please..') : map.set(key, help);
-            }else{
-                map = [ key => help ];
-            }
-            Context.addResource(HELP_RESOURCE_KEY, haxe.io.Bytes.ofString(haxe.Serializer.run(map)));
+            addToMap(key, help);
         #end
         return macro {
             Argan.args != null ? Argan.args.exists($v{key}) : false;
@@ -109,6 +99,19 @@ class Argan {
     }
 
     #if macro
+        private static function addToMap(key:String, ?help:String = ""){
+            var map:ArganMap = null;
+            if(firstRun)
+                firstrun();
+            if(Context.getResources().exists(HELP_RESOURCE_KEY)){
+                map = map_load();
+                map.exists(key) ? if(help != "") trace('Argan.hx, possible issue with key ${key}, ${key} already in use, use unique keys please..') : map.set(key, help);
+            }else{
+                map = [ key => help ];
+            }
+            Context.addResource(HELP_RESOURCE_KEY, haxe.io.Bytes.ofString(haxe.Serializer.run(map)));
+        }
+
         private static function firstrun(){
             firstRun = false;
             trace('Saving \'help map\' into haxe.Resource["$HELP_RESOURCE_KEY"], use Argan.get() for easy access');
@@ -152,8 +155,12 @@ class Argan {
      *  @param key String
      *  @return return String
      */
-    macro public static function get(key:String)
+    macro public static function get(key:String, ?help:String = ""){
+        #if macro
+            addToMap(key, help);
+        #end
         return macro {
             Argan.args.get($v{key});
         }
+    }
 }

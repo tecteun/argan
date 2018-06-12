@@ -37,6 +37,20 @@ var param2 = Argan.getDefault("some_boolean", "configure some boolean", true);
 var param3 = Argan.getDefault("some_int", "configure some int", 1);
 ```
 
+## Example program
+
+building examples/sys:
+
+compile with
+
+    haxe examples/sys/build.hxml
+
+The command
+
+    ./bin/main --help
+outputs:
+![Argan](https://raw.githubusercontent.com/tecteun/argan/master/console.png?sanitize=true&1)
+
 ## Defines
 
 Serialize options into json:

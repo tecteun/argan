@@ -1,0 +1,4 @@
+-neko bin/main.n 
+-main Main
+-lib argan
+-cmd nekotools boot bin/main.n
