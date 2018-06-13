@@ -17,6 +17,5 @@
             "args": ["examples/sys/build.hxml"],
             "problemMatcher": "$haxe"
         }
-        
     ]
 }

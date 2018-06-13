@@ -1,4 +1,5 @@
 -neko bin/main.n 
 -main Main
 -lib argan
+-cp examples/sys/
 -cmd nekotools boot bin/main.n
