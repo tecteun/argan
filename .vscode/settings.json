@@ -1,0 +1,5 @@
+{
+    "haxe.displayConfigurations": [
+        ["examples/sys/build.hxml"]
+    ]
+}

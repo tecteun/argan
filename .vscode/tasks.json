@@ -1,0 +1,22 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "taskName": "examples/sys/bin/main",
+            "type": "shell",
+            "command": "neko examples/sys/bin/main.n",
+            "problemMatcher": [
+                "$haxe"
+            ]
+        },
+        {
+            "taskName": "examples/sys/build.hxml",
+            "command": "haxe",
+            "args": ["examples/sys/build.hxml"],
+            "problemMatcher": "$haxe"
+        }
+        
+    ]
+}
