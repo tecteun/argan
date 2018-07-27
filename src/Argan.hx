@@ -100,12 +100,22 @@ class Argan {
 
     #if macro
         private static function addToMap(key:String, ?help:String = ""){
+            #if debug
+                trace(haxe.macro.Context.currentPos(), key, help);
+            #end
             var map:ArganMap = null;
             if(firstRun)
                 firstrun();
             if(Context.getResources().exists(HELP_RESOURCE_KEY)){
                 map = map_load();
-                map.exists(key) ? if(help != "") trace('Argan.hx, possible issue with key ${key}, ${key} already in use, use unique keys please..') : map.set(key, help);
+                if(map.exists(key)){
+                    if(help != "" && map.get(key) == "")
+                        map.set(key, help);
+                    else
+                        trace('Argan.hx, possible issue with key "${key}", "${key}" already in use ${help}, _not_ overriding help, use unique keys please..');
+                }else{
+                    map.set(key, help);
+                }
             }else{
                 map = [ key => help ];
             }
@@ -143,11 +153,7 @@ class Argan {
     #end
 
     macro public static function getDefault(key:String, help:String, ?default_:Null<Dynamic> = null):Dynamic {
-        var stype = switch(default_.expr){
-            case EConst(const): '$const';
-            default: null;
-        }
-        return macro {   var _:Dynamic = Argan.has($v{key}, $v{help + ' [default: ${stype}]'} ) ? Argan.get($v{key}) : ${default_}; _; };
+        return macro  Argan.get($v{key}, $v{help}, ${default_});
     }
     
     /**
@@ -155,12 +161,11 @@ class Argan {
      *  @param key String
      *  @return return String
      */
-    macro public static function get(key:String, ?help:String = ""){
-        #if macro
-            addToMap(key, help);
-        #end
-        return macro {
-            Argan.args.get($v{key});
+    macro public static function get(key:String, ?help:String = "", ?default_:Null<Dynamic> = null):Dynamic{
+        var stype = switch(default_.expr){
+            case EConst(const): '$const';
+            default: null;
         }
+        return macro {   var _:Dynamic = Argan.has($v{key}, $v{help + ' [default: ${stype}]'} ) ? Argan.args.get($v{key}) : ${default_}; _; };
     }
 }

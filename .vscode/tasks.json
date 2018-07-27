@@ -6,7 +6,7 @@
         {
             "taskName": "examples/sys/bin/main",
             "type": "shell",
-            "command": "neko examples/sys/bin/main.n",
+            "command": "neko bin/main.n",
             "problemMatcher": [
                 "$haxe"
             ]

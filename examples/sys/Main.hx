@@ -8,12 +8,17 @@ class Main {
 			Sys.println('');
 			Sys.exit(0);
 		}
-
+        trace(Argan.get("username"));
         var username = Argan.get("username", "override user");
+        //trace(Argan.get("username", "should give warning"));
         var password = Argan.get("password", "override password");
-        if(Argan.getDefault("threads", "set number of threads", 11)){
+        /*
+        if(Argan.getDefault("threads", "set number of threads", 11) == 11){
             //start threads
+            trace(Argan.getDefault("threads", "set number of threads", 11));
+            trace(Argan.get("threads", "set number of threads", 11));
         }
+        */
         if(Argan.has("beer")){
             //drink
         }
