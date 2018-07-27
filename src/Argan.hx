@@ -135,10 +135,8 @@ class Argan {
             trace('Saving \'help map\' into haxe.Resource["$HELP_RESOURCE_KEY"], use Argan.get() for easy access');
             if(haxe.macro.Context.defined("argan_json_output")){
                 var val = haxe.macro.Context.definedValue("argan_json_output");
-                if(val != "1"){
-                    jsonFile = val;
-                    Argan.HELP_RESOURCE_KEY = val + Argan.HELP_RESOURCE_KEY;
-                }
+                if(val != "1")
+                    jsonFile = val;                
                 Context.onAfterGenerate(function(){
                     var str = new StringBuf();
                     var map = map_load();
