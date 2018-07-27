@@ -20,11 +20,13 @@ class Argan {
     #if !sys
     public static var args(default, null):ArganMap;
     public static function start(config:Dynamic) : Void {
-        var args_set:ArganMap = new ArganMap();
-        for(f in Reflect.fields(config)){
-            args_set.set(f, Reflect.field(config, f));
+        if(null != config){
+            var args_set:ArganMap = new ArganMap();
+            for(f in Reflect.fields(config)){
+                args_set.set(f, Reflect.field(config, f));
+            }
+            args = args_set;
         }
-        args = args_set;
     }
     #else
     private static var _args:ArganMap = null;
