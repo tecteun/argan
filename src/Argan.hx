@@ -146,9 +146,12 @@ class Argan {
                     str.add('JSON ${jsonFile} saved');
                     str.add(FileSystem.exists(jsonFile) ? ' (overwritten!)\n' : '\n');
                     var content = new StringBuf();
+                    //not json compliant
                     //content.add('window["version"] = "${Macros.GetVersion()}";');
                     //content.add('window["${StringTools.htmlEscape(jsonFile)}"] = ${haxe.Json.stringify(objectFromMap(map))}');
-                    content.add('//${StringTools.htmlEscape(jsonFile)}\n');
+                    //content.add('//${StringTools.htmlEscape(jsonFile)}\n');
+                    
+                    //json compliant
                     content.add('${haxe.Json.stringify(objectFromMap(map))}');
                     File.saveContent(jsonFile, content.toString());
                     trace(str);
