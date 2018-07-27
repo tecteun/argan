@@ -9,6 +9,7 @@ import haxe.macro.Expr;
 #end
 
 typedef ArganMap = Map<String, Dynamic>;
+typedef ArganHelpMap = Map<String, { help:String, default_:Dynamic }>;
 class Argan {
     private static var HELP_RESOURCE_KEY:String = "_help_map";
     #if macro
@@ -89,9 +90,13 @@ class Argan {
      *  @param help optional help text, added to haxe.Resource and returned on help() 
      *  @return haxe.macro.Expr
      */
-    macro public static function has(key:String, ?help:String = ""):haxe.macro.Expr{
+    macro public static function has(key:String, ?help:String = "", ?default_:Null<Dynamic> = null):haxe.macro.Expr{
+        var stype = switch(default_.expr){
+            case EConst(const): '$const';
+            default: null;
+        }
         #if macro
-            addToMap(key, help);
+            addToMap(key, help, '[default: ${stype}]');
         #end
         return macro {
             Argan.args != null ? Argan.args.exists($v{key}) : false;
@@ -99,25 +104,26 @@ class Argan {
     }
 
     #if macro
-        private static function addToMap(key:String, ?help:String = ""){
+        private static function addToMap(key:String, ?help:String = "", ?default_:String = ""){
             #if debug
-                trace(haxe.macro.Context.currentPos(), key, help);
+                trace(haxe.macro.Context.currentPos(), key, help, default_);
             #end
-            var map:ArganMap = null;
+            var map:ArganHelpMap = null;
             if(firstRun)
                 firstrun();
             if(Context.getResources().exists(HELP_RESOURCE_KEY)){
                 map = map_load();
                 if(map.exists(key)){
-                    if(help != "" && map.get(key) == "")
-                        map.set(key, help);
-                    else
-                        trace('Argan.hx, possible issue with key "${key}", "${key}" already in use ${help}, _not_ overriding help, use unique keys please..');
+                    if(help != "")
+                        if(map.get(key).help == "")
+                            map.set(key, { help:help, default_:default_ });
+                        else
+                            trace('Argan.hx, possible issue with key "${key}", "${key}" already in use, _not_ overriding help with "${help}", use unique keys please..');
                 }else{
-                    map.set(key, help);
+                    map.set(key, { help:help, default_:default_ });
                 }
             }else{
-                map = [ key => help ];
+                map = [ key => { help:help, default_:default_ } ];
             }
             Context.addResource(HELP_RESOURCE_KEY, haxe.io.Bytes.ofString(haxe.Serializer.run(map)));
         }
@@ -147,7 +153,7 @@ class Argan {
                 });
             }
         }
-        private static function map_load():ArganMap{
+        private static function map_load():ArganHelpMap{
             return haxe.Unserializer.run('${Context.getResources().get(HELP_RESOURCE_KEY)}');
         }
     #end
@@ -162,10 +168,7 @@ class Argan {
      *  @return return String
      */
     macro public static function get(key:String, ?help:String = "", ?default_:Null<Dynamic> = null):Dynamic{
-        var stype = switch(default_.expr){
-            case EConst(const): '$const';
-            default: null;
-        }
-        return macro {   var _:Dynamic = Argan.has($v{key}, $v{help + ' [default: ${stype}]'} ) ? Argan.args.get($v{key}) : ${default_}; _; };
+        
+        return macro {   var _:Dynamic = Argan.has($v{key}, $v{help}, ${default_} ) ? Argan.args.get($v{key}) : ${default_}; _; };
     }
 }
