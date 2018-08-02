@@ -11,7 +11,12 @@ import haxe.macro.Expr;
 typedef ArganMap = Map<String, Dynamic>;
 typedef ArganHelpMap = Map<String, { help:String, default_:Dynamic }>;
 class Argan {
-    private static var HELP_RESOURCE_KEY:String = "_help_map";
+    
+    /**
+     * Internal Resource key, stores internal help dictionary using Context.addResource 
+     */
+    public static var HELP_RESOURCE_KEY(default, null):String = "_help_map";
+
     #if macro
     static var firstRun:Bool = true;
     static var jsonFile:String = '${HELP_RESOURCE_KEY}_file.json';
@@ -161,17 +166,26 @@ class Argan {
         }
     #end
 
-    macro public static function getDefault(key:String, help:String, ?default_:Null<Dynamic> = null):Dynamic {
-        return macro  Argan.get($v{key}, $v{help}, ${default_});
-    }
+    /**
+     * Get commandline argument
+     * @param key help key, avoid using spaces and special characters
+     * @param help optional help string
+     * @param default_ optional default value
+     * @return Dynamic
+        return macro
+     */
+    macro public static function get(key:String, ?help:String = "", ?default_:Null<Dynamic> = null):Dynamic
+        return macro { var _:Dynamic = Argan.has($v{key}, $v{help}, ${default_} ) ? Argan.args.get($v{key}) : ${default_}; _; };
     
     /**
-     *  Get commandline argument
-     *  @param key String
-     *  @return return String
+     * Identical to get()
+     * @param key 
+     * @param help 
+     * @param default_ 
+     * @return Dynamic
      */
-    macro public static function get(key:String, ?help:String = "", ?default_:Null<Dynamic> = null):Dynamic{
-        
-        return macro {   var _:Dynamic = Argan.has($v{key}, $v{help}, ${default_} ) ? Argan.args.get($v{key}) : ${default_}; _; };
-    }
+    macro public static function getDefault(key:String, help:String, ?default_:Null<Dynamic> = null):Dynamic
+        return macro Argan.get($v{key}, $v{help}, ${default_});
+    
+    
 }
