@@ -56,7 +56,7 @@ class Argan {
                 if(s.indexOf("=") > -1){
                     var split = s.split("=");
                     if(split.length > 1)
-                        args_set.set(split[0], split[1]);
+                        args_set.set(split.shift(), split.join("="));
                 }else{
                     if(previousArg != null)
                         args_set.set(previousArg, null);
