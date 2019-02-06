@@ -35,7 +35,7 @@ class Argan {
     }
     #else
     private static var _args:ArganMap = null;
-    public static var args(get_args, null):ArganMap;
+    public static var args(get, null):ArganMap;
     
     static function get_args() : ArganMap {
         if(_args == null){
@@ -45,6 +45,7 @@ class Argan {
         }
         return _args;
     }
+    
     static function parseArgs(args:Array<String>) : ArganMap {
         var args_set:ArganMap = new ArganMap();
         var previousArg = null;
