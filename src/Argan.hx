@@ -112,7 +112,7 @@ class Argan {
     }
 
     #if macro
-        private static function addToMap(key:String, ?help:String = "", ?default_:String = ""){
+        private static function addToMap(key:String, ?help:String = "", ?default_:Dynamic = ""){
             #if debug
                 trace(haxe.macro.Context.currentPos(), key, help, default_);
             #end
@@ -175,8 +175,33 @@ class Argan {
      * @return Dynamic
         return macro
      */
-    macro public static function get(key:String, ?help:String = "", ?default_:Null<Dynamic> = null):Dynamic
-        return macro { var _:Dynamic = Argan.has($v{key}, $v{help}, ${default_} ) ? Argan.args.get($v{key}) : ${default_}; _; };
+    macro public static function get(key:String, ?help:String = "", ?default_:Null<Dynamic> = null):Null<Dynamic> {
+        var sexpr = switch(default_.expr){
+            case EConst(const): const;
+            default: null;
+        }
+        #if ARGAN_SMARTCAST
+        var stype = switch(sexpr){
+            case CIdent(type): "b";
+            case CFloat(val): "f";
+            case CString(val): "s";
+            default: null;
+        }
+        #end
+        return macro {
+            var _:Dynamic = Argan.has($v{key}, $v{help}, ${default_} ) ? Argan.args.get($v{key}) : ${default_}; 
+            #if ARGAN_SMARTCAST
+            switch($v{stype}){
+                case "b": _ != "false";
+                case "f": Std.parseFloat(_);
+                case "s": _;
+                default: _;
+            }; 
+            #else
+            _;
+            #end
+        };
+    }
     
     /**
      * Identical to get()
