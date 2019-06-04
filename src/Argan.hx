@@ -176,14 +176,15 @@ class Argan {
         return macro
      */
     macro public static function get(key:String, ?help:String = "", ?default_:Null<Dynamic> = null):Null<Dynamic> {
+        #if ARGAN_SMARTCAST
         var sexpr = switch(default_.expr){
             case EConst(const): const;
             default: null;
         }
-        #if ARGAN_SMARTCAST
         var stype = switch(sexpr){
             case CIdent(type): "b";
             case CFloat(val): "f";
+            case CInt(val): "i";
             case CString(val): "s";
             default: null;
         }
@@ -191,9 +192,10 @@ class Argan {
         return macro {
             var _:Dynamic = Argan.has($v{key}, $v{help}, ${default_} ) ? Argan.args.get($v{key}) : ${default_}; 
             #if ARGAN_SMARTCAST
-            switch($v{stype}){
+            _ = switch($v{stype}){
                 case "b": _ != "false";
                 case "f": Std.parseFloat(_);
+                case "i": Std.parseInt(_);
                 case "s": _;
                 default: _;
             }; 
