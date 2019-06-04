@@ -100,11 +100,7 @@ class Argan {
      */
     macro public static function has(key:String, ?help:String = "", ?default_:Null<Dynamic> = null):haxe.macro.Expr{
         #if macro
-            var stype = switch(default_.expr){
-                case EConst(const): '$const';
-                default: null;
-            }
-            addToMap(key, help, '[default: ${stype}]');
+            addToMap(key, help, haxe.macro.ExprTools.getValue(default_));
         #end
         return macro {
             Argan.args != null ? Argan.args.exists($v{key}) : false;
@@ -177,16 +173,19 @@ class Argan {
      */
     macro public static function get(key:String, ?help:String = "", ?default_:Null<Dynamic> = null):Null<Dynamic> {
         #if ARGAN_SMARTCAST
-        var sexpr = switch(default_.expr){
-            case EConst(const): const;
-            default: null;
-        }
-        var f_cast:Dynamic = switch(sexpr){
-            case CIdent(type): macro function(_){ return _ != "false"; };
-            case CFloat(val): macro function(_){ return Std.parseFloat(_); };
-            case CInt(val): macro function(_){ return Std.parseInt(_); };
-            default: macro function(_) return _;
-        }
+            if(haxe.macro.ExprTools.getValue(default_) == null)
+                default_ = macro $v{map_load().get(key).default_};
+            
+            var sexpr = switch(default_.expr){
+                            case EConst(const): const;
+                            default: null;
+                        }
+            var f_cast:Dynamic = switch(sexpr){
+                case CIdent(type): macro function(_){ return _ != "false"; };
+                case CFloat(val): macro function(_){ return Std.parseFloat(_); };
+                case CInt(val): macro function(_){ return Std.parseInt(_); };
+                default: macro function(_) return _;
+            }
         #end
         return macro {
             if(Argan.has($v{key}, $v{help}, ${default_})){
