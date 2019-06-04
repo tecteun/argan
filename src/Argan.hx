@@ -99,11 +99,11 @@ class Argan {
      *  @return haxe.macro.Expr
      */
     macro public static function has(key:String, ?help:String = "", ?default_:Null<Dynamic> = null):haxe.macro.Expr{
-        var stype = switch(default_.expr){
-            case EConst(const): '$const';
-            default: null;
-        }
         #if macro
+            var stype = switch(default_.expr){
+                case EConst(const): '$const';
+                default: null;
+            }
             addToMap(key, help, '[default: ${stype}]');
         #end
         return macro {
@@ -181,24 +181,17 @@ class Argan {
             case EConst(const): const;
             default: null;
         }
-        var stype = switch(sexpr){
-            case CIdent(type): "b";
-            case CFloat(val): "f";
-            case CInt(val): "i";
-            case CString(val): "s";
-            default: null;
+        var f_cast:Dynamic = switch(sexpr){
+            case CIdent(type): macro function(_){ return _ != "false"; };
+            case CFloat(val): macro function(_){ return Std.parseFloat(_); };
+            case CInt(val): macro function(_){ return Std.parseInt(_); };
+            default: macro function(_) return _;
         }
         #end
         return macro {
             var _:Dynamic = Argan.has($v{key}, $v{help}, ${default_} ) ? Argan.args.get($v{key}) : ${default_}; 
             #if ARGAN_SMARTCAST
-            _ = switch($v{stype}){
-                case "b": _ != "false";
-                case "f": Std.parseFloat(_);
-                case "i": Std.parseInt(_);
-                case "s": _;
-                default: _;
-            }; 
+            ${f_cast}(_);
             #else
             _;
             #end
@@ -214,6 +207,4 @@ class Argan {
      */
     macro public static function getDefault(key:String, help:String, ?default_:Null<Dynamic> = null):Dynamic
         return macro Argan.get($v{key}, $v{help}, ${default_});
-    
-    
 }
