@@ -6,6 +6,6 @@
   "tags": ["sys", "args", "arguments", "general", "command", "line", "options", "std", "cli"],
   "description": "Define command line help inline!",
   "releasenote": "Argan is nuts! 🥜 🎉 ",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "contributors": ["tecteun"]
 }

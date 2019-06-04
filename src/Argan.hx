@@ -189,12 +189,15 @@ class Argan {
         }
         #end
         return macro {
-            var _:Dynamic = Argan.has($v{key}, $v{help}, ${default_} ) ? Argan.args.get($v{key}) : ${default_}; 
-            #if ARGAN_SMARTCAST
-            ${f_cast}(_);
-            #else
-            _;
-            #end
+            if(Argan.has($v{key}, $v{help}, ${default_})){
+                #if ARGAN_SMARTCAST
+                ${f_cast}(Argan.args.get($v{key}));
+                #else
+                Argan.args.get($v{key});
+                #end
+            }else{
+                ${default_};
+            }
         };
     }
     
