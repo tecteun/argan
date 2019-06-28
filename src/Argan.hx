@@ -142,7 +142,7 @@ class Argan {
                 Context.onAfterGenerate(function(){
                     var str = new StringBuf();
                     var map = map_load();
-                    str.add('\n>> Argan.hx Macro <<\n${haxe.Json.stringify(map,"\t")}\nsaved to:\n');
+                    str.add('\n>> Argan.hx Macro <<\n${map}\nsaved to:\n');
                     str.add('JSON ${jsonFile} saved');
                     str.add(FileSystem.exists(jsonFile) ? ' (overwritten!)\n' : '\n');
                     var content = new StringBuf();
