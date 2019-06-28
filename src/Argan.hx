@@ -142,7 +142,7 @@ class Argan {
                 Context.onAfterGenerate(function(){
                     var str = new StringBuf();
                     var map = map_load();
-                    str.add('\n>> Argan.hx Macro <<\n${map}\nsaved to:\n');
+                    str.add('\n>> Argan.hx Macro <<\n${haxe.Json.stringify(map,"\t")}\nsaved to:\n');
                     str.add('JSON ${jsonFile} saved');
                     str.add(FileSystem.exists(jsonFile) ? ' (overwritten!)\n' : '\n');
                     var content = new StringBuf();
@@ -180,8 +180,9 @@ class Argan {
                             case EConst(const): const;
                             default: null;
                         }
+            
             var f_cast:Dynamic = switch(sexpr){
-                case CIdent(type): macro function(_){ return _ != "false"; };
+                case CIdent(type): macro function(_):Dynamic { return Std.is(_, Bool) ? _ : _ != "false"; };
                 case CFloat(val): macro function(_){ return Std.parseFloat(_); };
                 case CInt(val): macro function(_){ return Std.parseInt(_); };
                 default: macro function(_) return _;
