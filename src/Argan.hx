@@ -8,7 +8,14 @@ import haxe.macro.Compiler;
 import haxe.macro.Expr;
 #end
 
+/**
+ * Input values, passed using start(), or parsed from Sys.args()
+ */
 typedef ArganMap = Map<String, Dynamic>;
+
+/**
+ * Help dictionary, filled using macro
+ */
 typedef ArganHelpMap = Map<String, { help:String, default_:Dynamic }>;
 class Argan {
     
@@ -85,6 +92,13 @@ class Argan {
         return obj;
     }
 
+    /**
+     * Use this function to get the created help dictionary.
+     * 
+     * Frontend rendering is up to the implementation.
+     * 
+     * @param object 
+     */
     macro public static function help(object:Bool = false){
         if(object)
             return macro { Argan.objectFromMap(haxe.Unserializer.run(haxe.Resource.getString($v{HELP_RESOURCE_KEY}))); };
